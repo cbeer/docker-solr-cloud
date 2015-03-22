@@ -1,0 +1,18 @@
+#!/bin/bash
+
+SOLR_CMD=/opt/solr/bin/solr
+
+$SOLR_CMD start -c -f $SOLR_OPTIONS &
+
+PID=$!
+
+while $SOLR_CMD status | grep -q "No Solr"; do
+  echo " [ WAITING FOR SOLR ]"
+  sleep 1
+done
+
+for i in $( ls /opt/solr/server/solr/configsets); do
+  $SOLR_CMD create_collection -c $i -n $i -d /opt/solr/server/solr/configsets/$i
+done
+
+wait $PID

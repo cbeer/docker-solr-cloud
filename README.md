@@ -1,0 +1,3 @@
+Solr Cloud on Docker
+==============
+
