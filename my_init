@@ -13,6 +13,11 @@ done
 
 for i in $( ls /opt/solr/server/solr/configsets); do
   $SOLR_CMD create_collection -c $i -n $i -d /opt/solr/server/solr/configsets/$i
+
+  until $SOLR_CMD healthcheck -c $i; do
+    $SOLR_CMD create_collection -c $i -n $i -d /opt/solr/server/solr/configsets/$i
+    sleep 1
+  done
 done
 
 wait $PID
